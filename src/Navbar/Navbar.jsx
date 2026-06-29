@@ -1,10 +1,9 @@
 import React from 'react'
-import Sidebar from './Sidebar'
 import {Search , Menu , User} from 'lucide-react';
 
 const Navbar = () => {
   return (
-    <nav className='flex justify-between px-3 py-4 bg-blue-950 ml-64'>
+    <nav className='flex justify-between px-3 py-4 bg-blue-950'>
         <div className='flex items-center text-xl text-white'>
             <Menu />
             <span className='text-xl font-semibold'>TODO-APP</span>
