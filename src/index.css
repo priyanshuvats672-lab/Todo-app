@@ -1,5 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
-
-*{
-    font-family: 'Artifakt Element';
+* {
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
 }
+
+:root {
+  --sidebar-w: 260px;
+  --accent: #7c3aed;
+  --accent-light: #a78bfa;
+  --accent-glow: rgba(124, 58, 237, 0.35);
+  --bg: #0a0a0f;
+  --surface: #13131a;
+  --surface2: #1c1c27;
+  --border: rgba(255,255,255,0.07);
+}
+
+body {
+  background: var(--bg);
+  color: #e2e2f0;
+  min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+/* Sidebar overlay for mobile */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+}
+.sidebar-overlay.open { display: block; }
+
+/* Glow pulse on add button */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+  50%       { box-shadow: 0 0 35px rgba(124,58,237,0.6); }
+}
+.glow-btn { animation: glow-pulse 2.5s ease-in-out infinite; }
+
+/* Slide-in for todo items */
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.todo-item { animation: slide-in 0.25s ease both; }
+
+/* Modal fade-in */
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.modal-card { animation: modal-in 0.2s ease both; }

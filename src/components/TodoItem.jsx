@@ -1,25 +1,47 @@
 import React from 'react'
-import { Trash2 } from 'lucide-react'
+import { Trash2, GripVertical } from 'lucide-react'
 
-const TodoItem = ({todos}) => {
-    
-    return (
-        <div className='w-full rounded-2xl px-6 py-4 flex items-center justify-between bg-zinc-800 shadow-lg'>
-            <span className='flex items-center gap-x-4'>
-                <input
-                    className='w-5 h-5 rounded accent-violet-500 cursor-pointer'
-                    type="checkbox"
-                />
-                <div className='flex flex-col'>
-                    <h1 className='text-xl font-semibold capitalize shadow-blue-200 text-white'>{todos.title}</h1>
-                    <p className='text-white text-lg'>{todos.description}</p>
-                </div>
-            </span>
-            <button className='text-zinc-400 hover:text-red-400 hover:scale-110 transition-all duration-200 cursor-pointer'>
-                <Trash2 size={20} />
-            </button>
-        </div>
-    )
+const TodoItem = ({ todos, deleteTodo }) => {
+  return (
+    <div className='todo-item group flex items-start gap-4 w-full rounded-2xl px-5 py-4 bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--accent)]/40 hover:bg-[var(--surface2)] transition-all duration-200 shadow-sm'>
+
+      {/* Drag handle (visual only) */}
+      <div className='mt-1 text-gray-700 group-hover:text-gray-500 transition-colors cursor-grab'>
+        <GripVertical size={16} />
+      </div>
+
+      {/* Checkbox */}
+      <div className='mt-0.5 flex-shrink-0'>
+        <input
+          className='w-4.5 h-4.5 rounded accent-[var(--accent)] cursor-pointer'
+          type='checkbox'
+          checked={todos.complete}
+          onChange={() => {}}
+        />
+      </div>
+
+      {/* Content */}
+      <div className='flex-1 min-w-0'>
+        <p className={`text-base font-semibold capitalize leading-snug ${todos.complete ? 'line-through text-gray-500' : 'text-white'}`}>
+          {todos.title}
+        </p>
+        {todos.description && (
+          <p className={`mt-1 text-sm leading-relaxed ${todos.complete ? 'text-gray-600' : 'text-gray-400'}`}>
+            {todos.description}
+          </p>
+        )}
+      </div>
+
+      {/* Delete */}
+      <button
+        onClick={() => deleteTodo(todos.id)}
+        className='flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-600 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer'
+        aria-label='Delete task'
+      >
+        <Trash2 size={16} />
+      </button>
+    </div>
+  )
 }
 
 export default TodoItem

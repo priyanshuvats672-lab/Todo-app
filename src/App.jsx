@@ -17,39 +17,68 @@ const App = () => {
   }, [todos]);
 
   function addTodo(todo) {
-    setTodos(prevtodos => [...prevtodos, todo]);
+    setTodos(prevtodos => [...prevtodos, {
+      id : Date.now(),
+      ...todo,
+      complete:false
+    }]);
+  }
+
+  const deleteTodo = (id)=>{
+      const newTodo = todos.filter((todo)=>todo.id !== id);
+      setTodos(newTodo);
   }
 
   return (
-    <div className='min-h-screen bg-black text-white flex'>
+    <div className='min-h-screen bg-[var(--bg)] text-white flex'>
 
-      {/* Fixed Sidebar */}
       <Sidebar />
 
-      {/* Main content — offset by sidebar width */}
-      <div className='flex-1 flex flex-col'>
+      {/* Main content — shifts right on md+ to account for fixed sidebar */}
+      <div className='flex-1 flex flex-col min-w-0 md:ml-[260px]'>
 
-        {/* Navbar sits at top of content area */}
         <Navbar />
 
-        {/* Todo list */}
-        <div className='flex flex-col gap-4 p-8 max-w-3xl w-full mx-auto'>
-          {!showForm && todos.map((todo, index) => (
-            <TodoItem key={index} todos={todo} />
-          ))}
-        </div>
+        <main className='flex-1 px-4 sm:px-8 py-8'>
+          {/* Header row */}
+          <div className='flex items-center justify-between mb-6 max-w-3xl mx-auto'>
+            <div>
+              <h1 className='text-2xl font-bold text-white'>All Tasks</h1>
+              <p className='text-gray-500 text-sm mt-1'>{todos.length} task{todos.length !== 1 ? 's' : ''} total</p>
+            </div>
+          </div>
 
-        {/* Add button */}
+          {/* Empty state */}
+          {todos.length === 0 && !showForm && (
+            <div className='max-w-3xl mx-auto flex flex-col items-center justify-center py-24 text-center'>
+              <div className='w-16 h-16 rounded-2xl bg-[var(--surface2)] flex items-center justify-center mb-4 border border-[var(--border)]'>
+                <Plus size={28} className='text-gray-600' />
+              </div>
+              <p className='text-gray-400 font-medium'>No tasks yet</p>
+              <p className='text-gray-600 text-sm mt-1'>Hit the + button to add your first task</p>
+            </div>
+          )}
+
+          {/* Todo list */}
+          <div className='flex flex-col gap-3 max-w-3xl mx-auto'>
+            {!showForm && todos.map((todo) => (
+              <TodoItem key={todo.id} deleteTodo={deleteTodo} todos={todo} />
+            ))}
+          </div>
+        </main>
+
+        {/* Floating add button */}
         {!showForm && (
           <button
             onClick={() => setShowForm(true)}
-            className='fixed bottom-10 right-10 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full p-4 shadow-lg transition-all duration-200 cursor-pointer'
+            className='glow-btn fixed bottom-8 right-8 bg-[var(--accent)] hover:bg-violet-500 text-white rounded-2xl p-4 shadow-xl transition-all duration-200 cursor-pointer hover:scale-110 active:scale-95 z-40'
+            aria-label='Add task'
           >
-            <Plus size={28} />
+            <Plus size={24} />
           </button>
         )}
 
-        {/* TodoForm modal */}
+        {/* Form modal rendered at root level so it overlays everything */}
         {showForm && (
           <TodoForm
             addTodo={addTodo}
