@@ -10,7 +10,28 @@ const App = () => {
     return JSON.parse(localStorage.getItem('todos')) || [];
   });
 
-  const [showForm, setShowForm] = useState(false);
+  const [mode, setMode] = useState("closed");
+  const [editingTodo, setEditingTodo] = useState(null);
+
+  const toggleTodo = (id) => {
+    const newTodo = todos.map((todo) => {
+      if (todo.id !== id) return todo;
+      return { ...todo, complete: !todo.complete };
+    });
+    setTodos(newTodo);
+  };
+
+  const editTodo = (todo) => {
+    setMode('edit');
+    setEditingTodo(todo);
+  };
+
+
+  const updateTodo = ({ title, description }) => {
+    setTodos(prev => prev.map(t =>
+      t.id === editingTodo.id ? { ...t, title, description } : t
+    ));
+  };
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -18,9 +39,9 @@ const App = () => {
 
   function addTodo(todo) {
     setTodos(prevtodos => [...prevtodos, {
-      id : Date.now(),
+      id: Date.now(),
       ...todo,
-      complete:false
+      complete: false
     }]);
   }
 
@@ -49,7 +70,7 @@ const App = () => {
           </div>
 
           {/* Empty state */}
-          {todos.length === 0 && !showForm && (
+          {todos.length === 0 && mode === 'closed' && (
             <div className='max-w-3xl mx-auto flex flex-col items-center justify-center py-24 text-center'>
               <div className='w-16 h-16 rounded-2xl bg-[var(--surface2)] flex items-center justify-center mb-4 border border-[var(--border)]'>
                 <Plus size={28} className='text-gray-600' />
@@ -61,16 +82,16 @@ const App = () => {
 
           {/* Todo list */}
           <div className='flex flex-col gap-3 max-w-3xl mx-auto'>
-            {!showForm && todos.map((todo) => (
-              <TodoItem key={todo.id} deleteTodo={deleteTodo} todos={todo} />
+            {(mode === 'closed') && todos.map((todo) => (
+              <TodoItem key={todo.id} editTodo = {editTodo} toggleTodo = {toggleTodo} deleteTodo={deleteTodo} todos={todo} />
             ))}
           </div>
         </main>
 
         {/* Floating add button */}
-        {!showForm && (
+        {(mode === 'closed') && (
           <button
-            onClick={() => setShowForm(true)}
+            onClick={() => { setMode('create'); setEditingTodo(null); }}
             className='glow-btn fixed bottom-8 right-8 bg-[var(--accent)] hover:bg-violet-500 text-white rounded-2xl p-4 shadow-xl transition-all duration-200 cursor-pointer hover:scale-110 active:scale-95 z-40'
             aria-label='Add task'
           >
@@ -79,10 +100,12 @@ const App = () => {
         )}
 
         {/* Form modal rendered at root level so it overlays everything */}
-        {showForm && (
+        {(mode === 'create' || mode === 'edit') && (
           <TodoForm
-            addTodo={addTodo}
-            onClose={() => setShowForm(false)}
+            addTodo={mode === 'edit' ? updateTodo : addTodo}
+            onClose={() => setMode('closed')}
+            mode={mode}
+            edit={editingTodo}
           />
         )}
       </div>

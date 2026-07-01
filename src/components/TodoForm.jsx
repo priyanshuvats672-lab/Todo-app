@@ -1,10 +1,22 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { X, Type, AlignLeft, Plus } from 'lucide-react'
 
-const TodoForm = ({ addTodo, onClose }) => {
+const TodoForm = ({ addTodo, mode , onClose , edit }) => {
 
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
+  
+    const [title, setTitle] = useState("")
+    const [description, setDescription] = useState("")
+
+    useEffect(() => {
+        if (!edit){
+          setTitle('')
+          setDescription('')
+          return;
+        }
+        setTitle(edit.title);
+        setDescription(edit.description);
+    }, [edit])
+
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -22,7 +34,7 @@ const TodoForm = ({ addTodo, onClose }) => {
         {/* Header */}
         <div className='flex items-center justify-between px-6 pt-6 pb-4 border-b border-[var(--border)]'>
           <div>
-            <h2 className='text-white font-bold text-xl tracking-tight'>New Task</h2>
+            <h2 className='text-white font-bold text-xl tracking-tight'>{mode === 'edit' ? 'Edit Task' : 'New Task'}</h2>
             <p className='text-gray-500 text-xs mt-0.5'>Fill in the details below</p>
           </div>
           <button
@@ -79,7 +91,7 @@ const TodoForm = ({ addTodo, onClose }) => {
               className='flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--accent)] hover:bg-violet-500 text-white text-sm font-semibold transition-all duration-200 cursor-pointer shadow-lg shadow-violet-900/30'
             >
               <Plus size={16} />
-              Add Task
+              {(mode === 'edit') ? 'Edit Task' : 'Add Task'}
             </button>
           </div>
         </form>

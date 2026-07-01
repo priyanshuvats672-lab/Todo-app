@@ -1,7 +1,7 @@
-import React from 'react'
-import { Trash2, GripVertical } from 'lucide-react'
+import { Trash2, GripVertical, SquarePen } from 'lucide-react'
 
-const TodoItem = ({ todos, deleteTodo }) => {
+const TodoItem = ({ toggleTodo , editTodo ,  todos, deleteTodo}) => {
+  
   return (
     <div className='todo-item group flex items-start gap-4 w-full rounded-2xl px-5 py-4 bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--accent)]/40 hover:bg-[var(--surface2)] transition-all duration-200 shadow-sm'>
 
@@ -16,7 +16,7 @@ const TodoItem = ({ todos, deleteTodo }) => {
           className='w-4.5 h-4.5 rounded accent-[var(--accent)] cursor-pointer'
           type='checkbox'
           checked={todos.complete}
-          onChange={() => {}}
+          onChange={() => toggleTodo(todos.id)}
         />
       </div>
 
@@ -39,6 +39,14 @@ const TodoItem = ({ todos, deleteTodo }) => {
         aria-label='Delete task'
       >
         <Trash2 size={16} />
+      </button>
+
+      {/* Edit Button */}
+      <button
+       className='flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-600 hover:text-green-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer'
+       onClick={()=>editTodo(todos)}
+       >
+        <SquarePen />
       </button>
     </div>
   )
