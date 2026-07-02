@@ -12,6 +12,17 @@ const App = () => {
 
   const [mode, setMode] = useState("closed");
   const [editingTodo, setEditingTodo] = useState(null);
+  const [searchText, setSearchText] = useState("");
+
+  function handleChange(e) {
+    setSearchText(e.target.value);
+  }
+
+  const filterItem = todos.filter(todo =>
+    todo.title.split(" ").some(word =>
+      word.toLowerCase().startsWith(searchText.toLowerCase())
+    )
+  )
 
   const toggleTodo = (id) => {
     const newTodo = todos.map((todo) => {
@@ -28,6 +39,7 @@ const App = () => {
 
 
   const updateTodo = ({ title, description }) => {
+    if(editTodo === null) return;
     setTodos(prev => prev.map(t =>
       t.id === editingTodo.id ? { ...t, title, description } : t
     ));
@@ -58,7 +70,7 @@ const App = () => {
       {/* Main content — shifts right on md+ to account for fixed sidebar */}
       <div className='flex-1 flex flex-col min-w-0 md:ml-[260px]'>
 
-        <Navbar />
+        <Navbar value = {searchText} onChange={handleChange} />
 
         <main className='flex-1 px-4 sm:px-8 py-8'>
           {/* Header row */}
@@ -69,20 +81,39 @@ const App = () => {
             </div>
           </div>
 
-          {/* Empty state */}
+          {/* Empty state — no todos at all */}
           {todos.length === 0 && mode === 'closed' && (
-            <div className='max-w-3xl mx-auto flex flex-col items-center justify-center py-24 text-center'>
-              <div className='w-16 h-16 rounded-2xl bg-[var(--surface2)] flex items-center justify-center mb-4 border border-[var(--border)]'>
-                <Plus size={28} className='text-gray-600' />
-              </div>
-              <p className='text-gray-400 font-medium'>No tasks yet</p>
-              <p className='text-gray-600 text-sm mt-1'>Hit the + button to add your first task</p>
+            <div className='empty-state max-w-3xl mx-auto flex flex-col items-center justify-center py-16 text-center'>
+              <img
+                src='/empty-state.png'
+                alt='No tasks'
+                className='empty-state-img w-52 h-52 object-contain mb-6 select-none bg-transparent'
+                draggable={false}
+              />
+              <h3 className='text-xl font-bold text-white mb-2'>All clear!</h3>
+              <p className='text-gray-400 font-medium'>You have no tasks yet.</p>
+              <p className='text-gray-600 text-sm mt-1'>Hit the <span className='text-[var(--accent-light)] font-semibold'>+</span> button to add your first task</p>
+            </div>
+          )}
+
+          {/* Empty state — search no results */}
+          {todos.length > 0 && filterItem.length === 0 && mode === 'closed' && (
+            <div className='empty-state max-w-3xl mx-auto flex flex-col items-center justify-center py-16 text-center'>
+              <img
+                src='/empty-state.png'
+                alt='No results'
+                className='empty-state-img w-48 h-48 object-contain mb-6 select-none opacity-80'
+                draggable={false}
+              />
+              <h3 className='text-xl font-bold text-white mb-2'>No results found</h3>
+              <p className='text-gray-400 font-medium'>No tasks match <span className='text-[var(--accent-light)]'>&ldquo;{searchText}&rdquo;</span></p>
+              <p className='text-gray-600 text-sm mt-1'>Try a different keyword</p>
             </div>
           )}
 
           {/* Todo list */}
           <div className='flex flex-col gap-3 max-w-3xl mx-auto'>
-            {(mode === 'closed') && todos.map((todo) => (
+            {(mode === 'closed') && filterItem.map((todo) => (
               <TodoItem key={todo.id} editTodo = {editTodo} toggleTodo = {toggleTodo} deleteTodo={deleteTodo} todos={todo} />
             ))}
           </div>

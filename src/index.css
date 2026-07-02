@@ -1,60 +1,248 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
+
 * {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
   box-sizing: border-box;
 }
 
 :root {
   --sidebar-w: 260px;
-  --accent: #7c3aed;
+  --accent: #8b5cf6;
   --accent-light: #a78bfa;
-  --accent-glow: rgba(124, 58, 237, 0.35);
-  --bg: #0a0a0f;
-  --surface: #13131a;
-  --surface2: #1c1c27;
-  --border: rgba(255,255,255,0.07);
+  --accent-glow: rgba(139, 92, 246, 0.25);
+  --bg: #09090e;
+  --surface: rgba(15, 15, 27, 0.65);
+  --surface2: rgba(28, 28, 45, 0.8);
+  --border: rgba(255, 255, 255, 0.05);
+  --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  --sidebar-gradient: linear-gradient(180deg, rgba(13, 13, 22, 0.8) 0%, rgba(8, 8, 14, 0.9) 100%);
 }
 
 body {
   background: var(--bg);
-  color: #e2e2f0;
+  color: #f1f1f6;
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--surface); }
-::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+/* Ambient Backdrop Glows */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Subtle Grid Pattern Overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.007) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.007) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Custom Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--accent), #6366f1);
+  border-radius: 99px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-light);
+}
+
+/* Sidebar Styling Overrides */
+aside {
+  background: var(--sidebar-gradient) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Sidebar logo container glow */
+aside div.w-8.h-8.rounded-lg {
+  background: var(--accent-gradient) !important;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+aside div.w-8.h-8.rounded-lg:hover {
+  transform: rotate(8deg) scale(1.08);
+}
+
+/* Sidebar navigation links */
+aside nav a {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid transparent;
+}
+aside nav a:hover {
+  transform: translateX(4px);
+  border-color: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02) !important;
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.01), 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+aside nav a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 25%;
+  height: 50%;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 99px;
+  transform: scaleY(0);
+  transition: transform 0.2s ease;
+}
+aside nav a:hover::before {
+  transform: scaleY(1);
+}
+
+/* Header/Navbar Glassmorphism */
+header {
+  background: rgba(9, 9, 14, 0.6) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
 
 /* Sidebar overlay for mobile */
 .sidebar-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 40;
+  transition: opacity 0.3s ease;
 }
-.sidebar-overlay.open { display: block; }
+.sidebar-overlay.open {
+  display: block;
+}
 
-/* Glow pulse on add button */
+/* Glow pulse on floating add button */
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
-  50%       { box-shadow: 0 0 35px rgba(124,58,237,0.6); }
+  0% {
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3), 0 0 0 0 rgba(139, 92, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 12px 32px rgba(139, 92, 246, 0.5), 0 0 0 8px rgba(139, 92, 246, 0);
+  }
+  100% {
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3), 0 0 0 0 rgba(139, 92, 246, 0);
+  }
 }
-.glow-btn { animation: glow-pulse 2.5s ease-in-out infinite; }
+.glow-btn {
+  background: var(--accent-gradient) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.3);
+  animation: glow-pulse 3s infinite alternate;
+}
+
+/* Todo Item Glassmorphism & Micro-animations */
+.todo-item {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(15, 15, 27, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  animation: slide-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.todo-item:hover {
+  background: rgba(22, 22, 38, 0.8);
+  border-color: rgba(139, 92, 246, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.4), 0 0 20px rgba(139, 92, 246, 0.08);
+}
+
+/* Actions in Todo Item */
+.todo-item button {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.todo-item:hover button {
+  opacity: 0.7;
+}
+.todo-item button:hover {
+  opacity: 1 !important;
+  transform: scale(1.1);
+}
+
+/* Form input & textarea styles */
+input[type="text"], textarea {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  background: rgba(28, 28, 45, 0.5) !important;
+}
+input[type="text"]:focus, textarea:focus {
+  background: rgba(28, 28, 45, 0.8) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Micro interaction on checkbox */
+input[type="checkbox"] {
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+input[type="checkbox"]:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.5));
+}
+
+/* Modal fade-in and scale-in */
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.96) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-card {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(16, 16, 26, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(139, 92, 246, 0.12);
+  animation: modal-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
 
 /* Slide-in for todo items */
 @keyframes slide-in {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.todo-item { animation: slide-in 0.25s ease both; }
 
-/* Modal fade-in */
-@keyframes modal-in {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
+/* Empty state float animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
 }
-.modal-card { animation: modal-in 0.2s ease both; }
+
+@keyframes empty-fade-in {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.empty-state {
+  animation: empty-fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.empty-state-img {
+  animation: float 4s ease-in-out infinite;
+  filter: drop-shadow(0 12px 24px rgba(139, 92, 246, 0.25));
+  mix-blend-mode: screen;
+}
+

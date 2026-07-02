@@ -1,7 +1,7 @@
 import React from 'react'
 import { Search, Bell, User } from 'lucide-react'
 
-const Navbar = () => {
+const Navbar = ({value , onChange}) => {
   return (
     <header className='sticky top-0 z-30 flex items-center justify-between px-6 py-4 bg-[var(--surface)]/80 backdrop-blur-md border-b border-[var(--border)]'>
 
@@ -19,6 +19,8 @@ const Navbar = () => {
           <Search size={15} className='absolute left-3 text-gray-500 pointer-events-none' />
           <input
             type='text'
+            value = {value}
+            onChange={onChange}
             placeholder='Search tasks…'
             className='bg-[var(--surface2)] border border-[var(--border)] rounded-xl pl-9 pr-4 py-2 text-sm text-gray-300 placeholder:text-gray-600 outline-none focus:border-[var(--accent)] transition-colors w-52'
           />

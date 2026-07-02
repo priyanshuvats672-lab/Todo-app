@@ -43,7 +43,7 @@ const TodoItem = ({ toggleTodo , editTodo ,  todos, deleteTodo}) => {
 
       {/* Edit Button */}
       <button
-       className='flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-600 hover:text-green-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer'
+       className='flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-600 hover:text-green-400 hover:bg-green-500/10 opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer'
        onClick={()=>editTodo(todos)}
        >
         <SquarePen />

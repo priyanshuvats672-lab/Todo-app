@@ -35,7 +35,7 @@ const Sidebar = () => {
           w-[260px] bg-[var(--surface)] border-r border-[var(--border)]
           transition-transform duration-300
           ${open ? 'translate-x-0' : '-translate-x-full'}
-          md:translate-x-0 md:static md:flex
+          md:translate-x-0 md:fixed md:flex
         `}
       >
         {/* Logo */}
