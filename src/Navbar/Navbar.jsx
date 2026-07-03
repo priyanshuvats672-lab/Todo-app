@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Search, Bell, User } from 'lucide-react'
+import useUser from '../context/userContext';
 
 const Navbar = ({value , onChange}) => {
+  const { user } = useUser();
   return (
     <header className='sticky top-0 z-30 flex items-center justify-between px-6 py-4 bg-[var(--surface)]/80 backdrop-blur-md border-b border-[var(--border)]'>
 
@@ -36,7 +38,7 @@ const Navbar = ({value , onChange}) => {
           <div className='w-6 h-6 rounded-full bg-[var(--accent)] flex items-center justify-center'>
             <User size={13} className='text-white' />
           </div>
-          <span className='text-sm font-medium text-gray-300 hidden sm:block'>User</span>
+          <span className='text-sm font-medium text-gray-300 hidden sm:block'>{user}</span>
         </div>
       </div>
     </header>
