@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import useUser from '../context/userContext';
 import { LayoutDashboard, CheckSquare, Calendar, LogOut, X, Menu } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
 
 const navLinks = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '#' },
-  { icon: CheckSquare,     label: 'Tasks',     href: '#' },
-  { icon: Calendar,        label: 'Calendar',  href: '#' },
+  { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
+  { icon: CheckSquare,     label: 'Tasks',     href: '/' },
+  { icon: Calendar,        label: 'Calendar',  href: '/about' },
 ]
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false)
-  const { user, setUser } = useUser();
+  const { user, logout } = useUser();
+  const { pathname } = useLocation();
 
   return (
     <>
@@ -71,23 +73,39 @@ const Sidebar = () => {
 
         {/* Nav links */}
         <nav className='flex-1 px-3 py-5 space-y-1'>
-          {navLinks.map(({ icon: Icon, label, href }) => (
-            <a
-              key={label}
-              href={href}
-              className='flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-[var(--surface2)] transition-all duration-200 group'
-            >
-              <Icon size={18} className='group-hover:text-[var(--accent-light)] transition-colors' />
-              <span className='font-medium text-sm'>{label}</span>
-            </a>
-          ))}
+          {navLinks.map(({ icon: Icon, label, href }) => {
+            const isActive = pathname === href;
+            return (
+              <Link
+                key={label}
+                to={href}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative
+                  ${
+                    isActive
+                      ? 'bg-[var(--accent)]/15 text-white border border-[var(--accent)]/25'
+                      : 'text-gray-400 hover:text-white hover:bg-[var(--surface2)] border border-transparent'
+                  }
+                `}
+              >
+                {/* Active left indicator bar */}
+                {isActive && (
+                  <span className='absolute left-0 top-1/4 h-1/2 w-[3px] rounded-full bg-[var(--accent)]' />
+                )}
+                <Icon
+                  size={18}
+                  className={isActive ? 'text-[var(--accent-light)]' : 'group-hover:text-[var(--accent-light)] transition-colors'}
+                />
+                <span className='font-medium text-sm'>{label}</span>
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Logout */}
         <div className='px-3 pb-6'>
           <button
-            onClick={() => setUser(null)}
-            className='w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 group'>
+            onClick={logout}
+            className='w-full cursor-pointer flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 group'>
             <LogOut size={18} />
             <span className='font-medium text-sm'>Log Out</span>
           </button>

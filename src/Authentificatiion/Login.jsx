@@ -21,7 +21,7 @@ const Login = () => {
   const [nameFocused, setNameFocused] = useState(false)
   const [emailFocused, setEmailFocused] = useState(false)
   const [passwordFocused, setPasswordFocused] = useState(false)
-  const {setUser} = useUser()
+  const {login} = useUser()
 
   const initials = name.trim()
     ? name.trim().split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()
@@ -32,14 +32,8 @@ const Login = () => {
   // TODO: wire up your own submit handler
   const handleSubmit = (e) => {
     e.preventDefault()
-    const userInfo = {
-      id: Date.now(),
-      name,
-      email,
-      password,
-      avatar,
-    }
-    setUser(name)
+    if (!name.trim()) return
+    login(name.trim())
   }
 
   return (
