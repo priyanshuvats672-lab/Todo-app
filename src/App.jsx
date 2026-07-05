@@ -1,11 +1,11 @@
 import Sidebar from './Navbar/Sidebar';
 import Login from './Authentificatiion/Login';
 import useUser from './context/userContext';
-import Home from './components/Home';
+import Home from './pages/Home';
 import { Routes, Route } from 'react-router-dom';
-import Dashboard from './components/Dashboard';
-import About from './components/About';
-import Notfound from './components/Notfound';
+import Dashboard from './pages/Dashboard';
+import About from './pages/About';
+import Notfound from './pages/Notfound';
 
 const App = () => {
   const { user } = useUser()

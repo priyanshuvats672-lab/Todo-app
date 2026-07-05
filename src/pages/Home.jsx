@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Plus } from 'lucide-react'
 import Navbar from '../Navbar/Navbar'
-import TodoContainer from './TodoContainer'
-import TodoForm from './TodoForm'
+import TodoContainer from '../components/TodoContainer'
+import TodoForm from '../components/TodoForm'
 
 const Task = () => {
     const [todos, setTodos] = useState(() => {
