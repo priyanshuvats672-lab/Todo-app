@@ -1,18 +1,21 @@
 import React, { useState } from 'react'
 import useUser from '../context/userContext';
-import { LayoutDashboard, CheckSquare, Calendar, LogOut, X, Menu } from 'lucide-react'
+import { LayoutDashboard, CheckSquare, Calendar, LogOut, LogIn, X, Menu, Settings, UserCircle } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
 const navLinks = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-  { icon: CheckSquare,     label: 'Tasks',     href: '/' },
-  { icon: Calendar,        label: 'Calendar',  href: '/about' },
+  { icon: CheckSquare, label: 'Tasks', href: '/' },
+  { icon: Calendar, label: 'Calendar', href: '/about' },
+  { icon: UserCircle, label: 'Profile', href: '/profile' },
+  { icon: Settings, label: 'Settings', href: '/settings' },
 ]
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false)
   const { user, logout } = useUser();
   const { pathname } = useLocation();
+
 
   return (
     <>
@@ -80,10 +83,9 @@ const Sidebar = () => {
                 key={label}
                 to={href}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative
-                  ${
-                    isActive
-                      ? 'bg-[var(--accent)]/15 text-white border border-[var(--accent)]/25'
-                      : 'text-gray-400 hover:text-white hover:bg-[var(--surface2)] border border-transparent'
+                  ${isActive
+                    ? 'bg-[var(--accent)]/15 text-white border border-[var(--accent)]/25'
+                    : 'text-gray-400 hover:text-white hover:bg-[var(--surface2)] border border-transparent'
                   }
                 `}
               >
@@ -106,8 +108,11 @@ const Sidebar = () => {
           <button
             onClick={logout}
             className='w-full cursor-pointer flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 group'>
-            <LogOut size={18} />
-            <span className='font-medium text-sm'>Log Out</span>
+            {(user) ? (
+              <><LogOut size={18} />
+              <span className='font-medium text-sm'>Log Out</span></>) : 
+              <><LogIn size={18} />
+              <span className='font-medium text-sm'>Log In</span></>}
           </button>
         </div>
       </aside>

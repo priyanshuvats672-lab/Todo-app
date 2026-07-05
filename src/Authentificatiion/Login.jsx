@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { CheckSquare, Eye, EyeOff, LogIn, Mail, Lock, User, ArrowRight } from 'lucide-react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import useUser from '../context/userContext'
 
 const AVATAR_COLORS = [
@@ -21,7 +22,12 @@ const Login = () => {
   const [nameFocused, setNameFocused] = useState(false)
   const [emailFocused, setEmailFocused] = useState(false)
   const [passwordFocused, setPasswordFocused] = useState(false)
-  const {login} = useUser()
+  const { login } = useUser()
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  // Redirect back to the page the user originally tried to visit, or home
+  const from = location.state?.from || "/";
 
   const initials = name.trim()
     ? name.trim().split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()
@@ -29,11 +35,11 @@ const Login = () => {
 
   const selectedColor = AVATAR_COLORS.find(c => c.id === avatar)?.bg
 
-  // TODO: wire up your own submit handler
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!name.trim()) return
     login(name.trim())
+    navigate(from, { replace: true })
   }
 
   return (
